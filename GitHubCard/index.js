@@ -39,16 +39,40 @@ axios.get("https://api.github.com/users/rodrigograca31")
 
 const followersArray = ["ELAndrews", "sergeikabuldzhanov", "tetondan", "dustinmyers", "justsml", "luishrd", "bigknell"];
 
-followersArray.forEach(element => {
-	axios.get("https://api.github.com/users/" + element)
+// axios.get("https://api.github.com", {
+// 	auth: {
+// 		username: 'rodrigograca31',
+// 		password: '642ac3a1e3232c0799b783f3d3f29fec08186549'
+// 	}
+// })
+
+const container = document.querySelector(".cards");
+
+// followersArray.forEach(element => {
+	axios.get("https://api.github.com/users/rodrigograca31")
 		.then(response => {
 			console.log(response.data);
-			const container = document.querySelector(".cards");
-			container.append(card(response.data))
-		}).catch(error => {
+			return response.data.followers_url
+		}).then(url => {
+			return axios.get(url);
+		}).then((response)=> {
+			console.log("followers array");
+			console.log(response.data);
+			response.data.forEach(element => {
+				axios.get(element.url).then(follower => {
+					container.append(card(follower.data));
+				}).catch(error => {
+					console.log("errors");
+				})
+			});
+		}).then(url => {
+			console.log(url);
+			
+		})
+		.catch(error => {
 			console.log("errors");
 		})
-});
+// });
 
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
