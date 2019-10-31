@@ -1,3 +1,6 @@
+axios.defaults.headers.common['Authorization'] = "token TOKE_REMOVED";
+
+
 /* Step 1: using axios, send a GET request to the following URL 
            (replacing the palceholder with your Github name):
            https://api.github.com/users/<your name>
@@ -39,17 +42,21 @@ axios.get("https://api.github.com/users/rodrigograca31")
 
 const followersArray = ["ELAndrews", "sergeikabuldzhanov", "tetondan", "dustinmyers", "justsml", "luishrd", "bigknell"];
 
-// axios.get("https://api.github.com", {
-// 	auth: {
-// 		username: 'rodrigograca31',
-// 		password: '642ac3a1e3232c0799b783f3d3f29fec08186549'
+
+
+// var ops = {
+// 	headers: {
+// 		'Authorization': 'token TOKE_REMOVED'
 // 	}
-// })
+// }
+
+
 
 const container = document.querySelector(".cards");
 
 // followersArray.forEach(element => {
-	axios.get("https://api.github.com/users/rodrigograca31")
+// axios.get("https://api.github.com/users/rodrigograca31?access_token=TOKE_REMOVED")
+axios.get("https://api.github.com/users/rodrigograca31")
 		.then(response => {
 			console.log(response.data);
 			return response.data.followers_url
