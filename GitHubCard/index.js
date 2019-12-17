@@ -1,7 +1,23 @@
+axios.defaults.headers.common['Authorization'] = "token TOKE_REMOVED";
+
+
 /* Step 1: using axios, send a GET request to the following URL 
            (replacing the palceholder with your Github name):
            https://api.github.com/users/<your name>
 */
+
+axios.get("https://api.github.com/users/rodrigograca31")
+	.then(response => {
+		console.log(response.data);
+
+
+		const container = document.querySelector(".cards");
+		container.append(card(response.data))
+
+	}).catch(error => {
+		console.log("errors");
+		
+	})
 
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
@@ -24,7 +40,46 @@
           user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const followersArray = ["ELAndrews", "sergeikabuldzhanov", "tetondan", "dustinmyers", "justsml", "luishrd", "bigknell"];
+
+
+
+// var ops = {
+// 	headers: {
+// 		'Authorization': 'token TOKE_REMOVED'
+// 	}
+// }
+
+
+
+const container = document.querySelector(".cards");
+
+// followersArray.forEach(element => {
+// axios.get("https://api.github.com/users/rodrigograca31?access_token=TOKE_REMOVED")
+axios.get("https://api.github.com/users/rodrigograca31")
+		.then(response => {
+			console.log(response.data);
+			return response.data.followers_url
+		}).then(url => {
+			return axios.get(url);
+		}).then((response)=> {
+			console.log("followers array");
+			console.log(response.data);
+			response.data.forEach(element => {
+				axios.get(element.url).then(follower => {
+					container.append(card(follower.data));
+				}).catch(error => {
+					console.log("errors");
+				})
+			});
+		}).then(url => {
+			console.log(url);
+			
+		})
+		.catch(error => {
+			console.log("errors");
+		})
+// });
 
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
@@ -35,7 +90,7 @@ const followersArray = [];
     <h3 class="name">{users name}</h3>
     <p class="username">{users user name}</p>
     <p>Location: {users location}</p>
-    <p>Profile:  
+    <p>Profile:
       <a href={address to users github page}>{address to users github page}</a>
     </p>
     <p>Followers: {users followers count}</p>
@@ -46,10 +101,46 @@ const followersArray = [];
 
 */
 
-/* List of LS Instructors Github username's: 
-  tetondan
-  dustinmyers
-  justsml
-  luishrd
-  bigknell
+// ES6
+const card = (info) => {
+	const card = document.createElement("div");
+	card.classList.add("card")
+	const img = document.createElement("img");
+	const cardinfo = document.createElement("div");
+	cardinfo.classList.add("card-info")
+	const h3 = document.createElement("h3");
+	h3.classList.add("name")
+
+	const p1 = document.createElement("p");
+	p1.classList.add("username")
+	const p2 = document.createElement("p");
+	const p3 = document.createElement("p");
+	const p4 = document.createElement("p");
+	const p5 = document.createElement("p");
+	const p6 = document.createElement("p");
+
+
+	img.src = info.avatar_url;
+	h3.innerText = info.name;
+	p1.innerText = info.login;
+
+	p2.innerText = `Location: ${info.location}`;
+	p3.innerHTML = `Profile: <a href=${info.html_url}>${info.html_url}</a>`
+	p4.innerText = `Followers: ${info.followers}`;
+	p5.innerText = `Following: ${info.following}`;
+	p6.innerText = `Bio: ${info.bio}`;
+
+	cardinfo.append(h3, p1, p2, p3, p4, p5, p6)
+	card.append(img, cardinfo);
+
+	return card;
+}
+
+
+/* List of LS Instructors Github username's:
+	tetondan
+	dustinmyers
+	justsml
+	luishrd
+	bigknell
 */
